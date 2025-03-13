@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 
 interface SearchBarProps {
   destinations: string[];
