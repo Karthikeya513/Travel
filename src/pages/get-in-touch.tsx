@@ -1,22 +1,47 @@
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
+type FormValues = {
+  name: string;
+  email: string;
+};
 
 const Contact = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+  } = useForm<FormValues>();
 
-  const onSubmit = (data: any) => {
-    console.log("Form Submitted", data);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log("Form Submitted:", data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6">
-      <input {...register("name", { required: true })} placeholder="Name" className="border p-2 w-full" />
-      {errors.name && <p>Name is required</p>}
+    <form onSubmit={handleSubmit(onSubmit)} className="p-6 max-w-md mx-auto space-y-4 border rounded-lg shadow-md">
+      <div>
+        <input
+          {...register("name", { required: "Name is required" })}
+          placeholder="Name"
+          className="border p-2 w-full rounded-md"
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      </div>
 
-      <input {...register("email", { required: true })} placeholder="Email" className="border p-2 w-full" />
-      {errors.email && <p>Email is required</p>}
+      <div>
+        <input
+          {...register("email", {
+            required: "Email is required",
+            pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "Invalid email format" }
+          })}
+          placeholder="Email"
+          className="border p-2 w-full rounded-md"
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+      </div>
 
-      <button type="submit" className="p-2 bg-blue-500 text-white">Submit</button>
+      <button type="submit" className="p-2 bg-blue-500 text-white rounded-md w-full hover:bg-blue-600 transition">
+        Submit
+      </button>
     </form>
   );
 };
